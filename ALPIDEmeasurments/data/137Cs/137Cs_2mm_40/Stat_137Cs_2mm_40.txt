@@ -1,0 +1,7 @@
+Data recieved	= 10761728 
+Packets recieved = 10286 
+Readout_time = 60.000283s 
+Data idle recieved	= 10571468 
+Data busy recieved	= 0 
+Dead time [percentage] = 98.232068 
+Events detected	= 13115 

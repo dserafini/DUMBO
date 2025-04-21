@@ -1,0 +1,20 @@
+# This macro is used to properly set up the interactive session (GUI)
+
+# Open the UI using Qt.
+/vis/open OGLSQt
+
+# Initialize the simulation, building both the geometry and the physics tables.
+/run/initialize
+
+# Draw the volume on the UI and add the trajectories (when they will be available).
+/vis/drawVolume
+/vis/scene/add/trajectories smooth
+/vis/scene/endOfEventAction accumulate
+
+# Setup properly the primary source.
+/control/execute macros/setupSource.mac
+
+# Additional settings
+/vis/viewer/set/defaultColour 0 0 0 1
+/vis/viewer/set/background 1 1 1 0
+/vis/scene/endOfEventAction accumulate 0
