@@ -8,5 +8,7 @@
 
 
 # Run a given number of events (primary particles).
-/run/beamOn 10000
+# /run/beamOn 10000
 #/run/beamOn 7717295 # 15 min
+
+/run/beamOn 1
