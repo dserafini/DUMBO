@@ -53,6 +53,7 @@ class AlpideHit : public G4VHit
       G4double fxPosition;
       G4double fzPosition;
 
+      G4int fCopyNo;
 };
 
 // Definition of a HitColletion
