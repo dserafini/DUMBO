@@ -84,13 +84,9 @@ G4bool AlpideDetector::ProcessHits(G4Step* aStep,
   // Get pixel hit by specific step position
   // Retrieve hit physical volumes
   G4VPhysicalVolume *phyPixel = TH->GetVolume();
-  G4VPhysicalVolume *phyColumn = TH->GetVolume(1);
   G4VPhysicalVolume *phyMatrix = TH->GetVolume(2);
-  // x position (column inside matrix)
-  G4ThreeVector posColumn = phyColumn->GetTranslation() + phyMatrix->GetTranslation();
   // z position (along column)
-  G4ThreeVector posPixel = phyPixel->GetTranslation() + posColumn;
-
+  G4ThreeVector posPixel = phyPixel->GetTranslation() + phyMatrix->GetTranslation();
   // Find particle type
   particleName = aStep->GetTrack()->GetParticleDefinition()->GetParticleName();
 
@@ -100,7 +96,7 @@ G4bool AlpideDetector::ProcessHits(G4Step* aStep,
   if (stepCounter == 0) 
   {
     depositedEnergy += 1000 * aStep->GetTotalEnergyDeposit(); // update energy in keVs
-    fxPosition = posColumn[0]; // Retrieve pixel position along detector's short side
+    fxPosition = posPixel[0]; // Retrieve pixel position along detector's short side
     fzPosition = posPixel[2]; // Retrieve pixel position along detector's long side
   }
 
@@ -109,7 +105,7 @@ G4bool AlpideDetector::ProcessHits(G4Step* aStep,
   if (stepCounter != 0 && pixelCopyNumber[stepCounter-1] == pixelCopyNumber[stepCounter]) 
   {
     depositedEnergy += 1000 * aStep->GetTotalEnergyDeposit();// update energy in keVs (keep adding for each step inside a fixed pixel to understand how much energy was released inside that)
-    fxPosition = posColumn[0];
+    fxPosition = posPixel[0];
     fzPosition = posPixel[2];
   }
 
@@ -127,7 +123,7 @@ G4bool AlpideDetector::ProcessHits(G4Step* aStep,
 
     depositedEnergy = 0; // Reset energy to 0 to start analyzing new pixel 
     depositedEnergy += 1000 * aStep->GetTotalEnergyDeposit();
-    fxPosition = posColumn[0];
+    fxPosition = posPixel[0];
     fzPosition = posPixel[2];
   }
 
