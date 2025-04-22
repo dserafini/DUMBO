@@ -1,9 +1,0 @@
-*.raw
-*.swp
-*.orig
-*.so
-*.o
-
-build/*
-outputs/*
-analysis/*
