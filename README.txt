@@ -1,4 +1,4 @@
-This is the code I developed during my Master's thesis journey to run GEANT4 simulations that evaluate the performance of a MAPS-based beta radiation detector. Order is definitely not a strength of this project and my coding style is probably extremely naive. I beg pardon to everyone that ends up here, but sharing will help progress the work I started during my thesis.  
+This is the code I (Vittoria Pavanello) developed during my Master's thesis journey to run GEANT4 simulations that evaluate the performance of a MAPS-based beta radiation detector. Order is definitely not a strength of this project and my coding style is probably extremely naive. I beg pardon to everyone that ends up here, but sharing will help progress the work I started during my thesis.  
 
 Inside these folders you can find:
 
