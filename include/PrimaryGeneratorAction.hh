@@ -4,6 +4,7 @@
 #include <G4VUserPrimaryGeneratorAction.hh>
 
 #include "DetectorConstruction.hh"
+#include "Parameters.hh"
 
 class G4ParticleGun;
 class G4GeneralParticleSource;
@@ -24,7 +25,7 @@ private:
 
     // DetectorConstruction parameters (check that the parameters in DetectorConstruction.hh are the same)
     // Cells in source
-    G4int fNsources = 1000;
+    G4int fNsources = Parameters::nCells;
     G4double fcellRadius = 10 * um;
 };
 

@@ -5,6 +5,7 @@
 #include <G4SystemOfUnits.hh>
 #include <G4Material.hh>
 #include "AlpideHit.hh"
+#include "Parameters.hh"
 
 class G4LogicalVolume;
 
@@ -82,7 +83,7 @@ private:
     // Cell parameters
     G4bool is_smallVolume = false;
     G4bool is_randomPositions = false;
-    G4int fNsources = 1;
+    G4int fNsources = Parameters::nCells; // Number of cells to be created
     G4double fBoundaryx = 5 * mm; // Size (x,z) of the reduced volume where to deposit the cells 
     G4double fBoundaryz = 5 * mm;
     G4double fcellRadius = 10 * um; // https://reader.elsevier.com/reader/sd/pii/S0169409X18300024?token=E8618C9C6782273C068EEC57777794B675E24278B543CBBE3C758A982C64E215634CD9EEE368BD3FA478DE83183DCBBF&originRegion=eu-west-1&originCreation=20230514074344
