@@ -72,11 +72,6 @@ G4bool AlpideDetector::ProcessHits(G4Step* aStep,
 
   AlpideHit* newHit = new AlpideHit();
 
-  // Get the incoming kinetic energy
-  newHit->SetTrackEnergy(aStep->GetTrack()->GetKineticEnergy());
-  // Set the hit position
-  newHit->SetPosition(aStep);
-
   // Save pixel copy numbers
   pixCopyNumber = TH->GetVolume()->GetCopyNo();
   pixelCopyNumber.push_back(pixCopyNumber);
@@ -89,6 +84,9 @@ G4bool AlpideDetector::ProcessHits(G4Step* aStep,
   G4ThreeVector posPixel = phyPixel->GetTranslation() + phyMatrix->GetTranslation();
   // Find particle type
   particleName = aStep->GetTrack()->GetParticleDefinition()->GetParticleName();
+  newHit->SetPixelPosition(posPixel);
+  newHit->SetDepositedEnergy(aStep->GetTotalEnergyDeposit());
+  newHit->SetPixelCopyNo(pixCopyNumber);
 
   // SAVE INFO PER HIT: to do that, check the step's parameters not to save wrong info
   
