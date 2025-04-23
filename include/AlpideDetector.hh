@@ -8,6 +8,7 @@
 #include <vector>
 #include <utility>
 #include <G4AnalysisManager.hh>
+#include "Parameters.hh"
 
 class G4Step;
 class G4HCofThisEvent;
@@ -46,7 +47,7 @@ class AlpideDetector : public G4VSensitiveDetector
     std::vector<G4String> interactingParticles;
 
     // THRESHOLD (keV)
-    G4double energyTHRESHOLD = 1;
+    G4double energyTHRESHOLD = Parameters::pixelEnergyThreshold;
 
     // Get the total number of interacting particles
     G4int GetinteractingParticleCount() const       { return interactingParticleCount; }
