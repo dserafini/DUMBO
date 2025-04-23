@@ -30,17 +30,20 @@ class AlpideHit : public G4VHit
     void SetDepositedEnergy(G4double edep) {fDepositedEnergy = edep;}
     void SetPixelPosition(G4ThreeVector aVec) {fPixelPosition = aVec;}
     void SetPixelCopyNo(G4int copyno) {fCopyNo = copyno;}
+    void SetParticleDefinition(const G4ParticleDefinition* def) {fParticleDef = def;}
 
     // Get different physical quantities
     G4double GetDepositedEnergy() const       { return fDepositedEnergy; }
     G4ThreeVector GetPixelPosition() {return fPixelPosition;}
     G4int GetPixelCopyNo() {return fCopyNo;}
+    const G4ParticleDefinition* GetParticleDefinition() {return fParticleDef;}
 
   private:
 
       G4double fDepositedEnergy;
       G4ThreeVector fPixelPosition;
       G4int fCopyNo;
+      const G4ParticleDefinition* fParticleDef;
 };
 
 // Definition of a HitColletion
