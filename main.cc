@@ -18,12 +18,12 @@ int main(int argc, char** argv)
   G4cout << "Application starting..." << G4endl;
 
   // Get the current time
-  std::time_t currentTime = std::time(nullptr);
+  // std::time_t currentTime = std::time(nullptr);
   // Create a random number generator engine
-  std::default_random_engine generator(static_cast<unsigned int>(currentTime));
+  // std::default_random_engine generator(static_cast<unsigned int>(currentTime));
   // Set the random seed for GEANT4
-  G4Random::setTheEngine(new CLHEP::MTwistEngine(generator()));
-  G4Random::setTheSeed(static_cast<long>(currentTime));
+  // G4Random::setTheEngine(new CLHEP::MTwistEngine(generator()));
+  // G4Random::setTheSeed(static_cast<long>(currentTime));
 
   std::vector<G4String> macros;
   G4bool interactive = false;
