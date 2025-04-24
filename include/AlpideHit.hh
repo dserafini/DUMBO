@@ -26,34 +26,24 @@ class AlpideHit : public G4VHit
     inline void* operator new(size_t);
     inline void  operator delete(void*);
 
-    void SetTrackEnergy    (G4double en)      { fEnergy = en; }
-
     // This is used to get the correct pixel position
-    void SetPosition(G4Step *aStep);
+    void SetDepositedEnergy(G4double edep) {fDepositedEnergy = edep;}
+    void SetPixelPosition(G4ThreeVector aVec) {fPixelPosition = aVec;}
+    void SetPixelCopyNo(G4int copyno) {fCopyNo = copyno;}
+    void SetParticleDefinition(const G4ParticleDefinition* def) {fParticleDef = def;}
 
     // Get different physical quantities
-    G4double GetTrackEnergy() const       { return fEnergy; }
     G4double GetDepositedEnergy() const       { return fDepositedEnergy; }
-    G4double GetDepositedEnergyPixel0() const       { return fDepositedEnergyPixel0; }
-
-    // For the hit pixel position.
-    G4double GetHitPixelxPosition() const       { return fxPosition; }
-    G4double GetHitPixelzPosition() const       { return fzPosition; }
-
-
+    G4ThreeVector GetPixelPosition() {return fPixelPosition;}
+    G4int GetPixelCopyNo() {return fCopyNo;}
+    const G4ParticleDefinition* GetParticleDefinition() {return fParticleDef;}
 
   private:
 
-      G4double fEnergy;
       G4double fDepositedEnergy;
-      G4double fDepositedEnergyPixel0;
-      G4double firstPixelCopyNumber = -1.;
-
-      // Hit pixel position.
-      G4double fxPosition;
-      G4double fzPosition;
-
+      G4ThreeVector fPixelPosition;
       G4int fCopyNo;
+      const G4ParticleDefinition* fParticleDef;
 };
 
 // Definition of a HitColletion

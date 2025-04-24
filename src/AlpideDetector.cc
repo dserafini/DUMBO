@@ -72,11 +72,6 @@ G4bool AlpideDetector::ProcessHits(G4Step* aStep,
 
   AlpideHit* newHit = new AlpideHit();
 
-  // Get the incoming kinetic energy
-  newHit->SetTrackEnergy(aStep->GetTrack()->GetKineticEnergy());
-  // Set the hit position
-  newHit->SetPosition(aStep);
-
   // Save pixel copy numbers
   pixCopyNumber = TH->GetVolume()->GetCopyNo();
   pixelCopyNumber.push_back(pixCopyNumber);
@@ -88,7 +83,12 @@ G4bool AlpideDetector::ProcessHits(G4Step* aStep,
   // z position (along column)
   G4ThreeVector posPixel = phyPixel->GetTranslation() + phyMatrix->GetTranslation();
   // Find particle type
+  const G4ParticleDefinition* particleType = aStep->GetTrack()->GetParticleDefinition();
   particleName = aStep->GetTrack()->GetParticleDefinition()->GetParticleName();
+  newHit->SetPixelPosition(posPixel);
+  newHit->SetDepositedEnergy(aStep->GetTotalEnergyDeposit());
+  newHit->SetPixelCopyNo(pixCopyNumber);
+  newHit->SetParticleDefinition(particleType);
 
   // SAVE INFO PER HIT: to do that, check the step's parameters not to save wrong info
   
@@ -130,7 +130,8 @@ G4bool AlpideDetector::ProcessHits(G4Step* aStep,
   stepCounter ++; // Increase step counter (variable to count how many steps are happening)
 
   // Add to the HC
-  fHitsCollection->insert(newHit);
+  if (fHitsCollection)
+    fHitsCollection->insert(newHit);
 
   return true;
 
@@ -139,41 +140,91 @@ G4bool AlpideDetector::ProcessHits(G4Step* aStep,
 // What happens at the end of the events
 void AlpideDetector::EndOfEvent(G4HCofThisEvent*)
 {
+  std::map<int, double> energyPerPixel;
+  std::map<int, double> energyPerPixelThresholded;
+  std::map<int, G4ThreeVector> posPerPixelThresholded;
+  std::map<int, const G4ParticleDefinition*> defPerEvent;
+
+  G4int nofHits = fHitsCollection->entries();
+  G4cout << "nofHits: " << nofHits << G4endl;
+
+  G4int pixID;
+  G4double edep;
+  for ( G4int i=0; i<nofHits; i++ )
+  {
+    pixID = (*fHitsCollection)[i]->GetPixelCopyNo();
+    edep = (*fHitsCollection)[i]->GetDepositedEnergy();
+    G4cout << "pixID " << pixID << G4endl;
+    energyPerPixel[pixID] += edep;
+    defPerEvent[i] = (*fHitsCollection)[i]->GetParticleDefinition();
+  }
+
+  for (auto& entry : energyPerPixel) {
+    if (entry.second > energyTHRESHOLD) {
+      energyPerPixelThresholded[entry.first] = entry.second;
+      G4cout << "in " << entry.first << " energy is " << entry.second << G4endl;
+    }
+  }
+  
+  for (auto& entry : energyPerPixelThresholded){
+    posPerPixelThresholded[pixID] = G4ThreeVector(pixID % 512, 0, pixID);
+    // da aggiustare
+  }
+
+  const G4ParticleDefinition* firstDef = defPerEvent[0];
+  interactingParticleCount = 1;
+  for (auto& entry : defPerEvent) {
+    if (entry.second != firstDef)
+      interactingParticleCount = 2;
+  }
+
+  G4AnalysisManager* man = G4AnalysisManager::Instance();
+
+  hitEventCount = energyPerPixelThresholded.size();
+  man->FillH1(3, hitEventCount);
+
+  for (auto& entry : energyPerPixelThresholded) man->FillH1(2, entry.second);
+  for (auto& entry : posPerPixelThresholded) man->FillH2(1, entry.second.getX(), entry.second.getZ());
+
+  // Nutple
+  man->FillNtupleIColumn(0, interactingParticleCount);
+  man->AddNtupleRow();
+
   // SAVE DATA AT THE END OF THE EVENT
-  if (depositedEnergy > energyTHRESHOLD) // IF energy threshold requirments are met
-  {
-    hitEventCount ++; // Increase the number of observed hits per analyzed event
-    // Save data
-    hitsVector.push_back(std::make_pair(fzPosition, fxPosition));
-    depositedEnergyPerHit.push_back(depositedEnergy);
-    interactingParticles.push_back(particleName);
-  }
+  // if (depositedEnergy > energyTHRESHOLD) // IF energy threshold requirments are met
+  // {
+  //   hitEventCount ++; // Increase the number of observed hits per analyzed event
+  //   // Save data
+  //   hitsVector.push_back(std::make_pair(fzPosition, fxPosition));
+  //   depositedEnergyPerHit.push_back(depositedEnergy);
+  //   interactingParticles.push_back(particleName);
+  // }
 
-  // SAVE HOW MANY PARTICLES WERE DETECTED
-  if (numberOfDifferentElementsInVector(interactingParticles) == 2) // IF there is more than one type of particle (e- or gamma) insieme interactingParticles vector
-  {
-    // Save total of 2 interacting particles
-    interactingParticleCount ++;
-    interactingParticleCount ++;
-  }
-  if (numberOfDifferentElementsInVector(interactingParticles) == 1)
-  {
-    // Save total of 1 interacting particle
-    interactingParticleCount ++;
-  }
+  // // SAVE HOW MANY PARTICLES WERE DETECTED
+  // if (numberOfDifferentElementsInVector(interactingParticles) == 2) // IF there is more than one type of particle (e- or gamma) insieme interactingParticles vector
+  // {
+  //   // Save total of 2 interacting particles
+  //   interactingParticleCount ++;
+  //   interactingParticleCount ++;
+  // }
+  // if (numberOfDifferentElementsInVector(interactingParticles) == 1)
+  // {
+  //   // Save total of 1 interacting particle
+  //   interactingParticleCount ++;
+  // }
 
 
-  // SAVING HISTOGRAMS AND NTUPLE (declared in RunAction.cc)
-  if(hitEventCount != 0)
-  {
-    G4AnalysisManager* man = G4AnalysisManager::Instance();
-    man->FillH1(3, hitEventCount);
-    for (auto energy: depositedEnergyPerHit) man->FillH1(2, energy);
-    for (auto hit: hitsVector) man->FillH2(1, hit.first, hit.second);
-    // Nutple
-    man->AddNtupleRow();
-    man->FillNtupleIColumn(0, interactingParticleCount);
-  }
+  // // SAVING HISTOGRAMS AND NTUPLE (declared in RunAction.cc)
+  // if(hitEventCount != 0)
+  // {
+  //   G4AnalysisManager* man = G4AnalysisManager::Instance();
+  //   man->FillH1(3, hitEventCount);
+  //   for (auto energy: depositedEnergyPerHit) man->FillH1(2, energy);
+  //   for (auto hit: hitsVector) man->FillH2(1, hit.first, hit.second);
+  //   // Nutple
+  //   man->AddNtupleRow();
+  //   man->FillNtupleIColumn(0, interactingParticleCount);
+  // }
 
   // RESET VARIABLES AT THE END OF EVENT
   pixelCopyNumber.clear();
