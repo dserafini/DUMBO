@@ -39,6 +39,8 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     G4double excitEnergy = 0.*keV;
 
     G4ParticleDefinition *ion = G4IonTable::GetIonTable()->GetIon(Z, A, excitEnergy);
+
+    /*
     fParticleGun->SetParticleDefinition(ion);
     fParticleGun->SetParticleCharge(ionCharge);
     fParticleGun->SetParticleEnergy(0.*GeV);
@@ -57,5 +59,5 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
     // Primary vertex generation
     //fParticleGun->GeneratePrimaryVertex(anEvent);
-
+*/
 }
