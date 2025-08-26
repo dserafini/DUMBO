@@ -278,67 +278,67 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     //////////////////////////////////////////////////////////////
     // Construction of the unsensitive electronics volume that each ALPIDE has along one of its long sides
     // !!! These layer are implemented ONLY for the 2x2 configuration !!!
-    if(fNAlpidesAlongShort * fNAlpidesAlongLong == 4)
-    {
-        G4VSolid* deadBox = new G4Box("deadBox", fDeadShortSide / 2, fAlpideThickness / 2, fLongSide / 2);
-        G4LogicalVolume *deadLog = new G4LogicalVolume(deadBox, nist->FindOrBuildMaterial("G4_Si"), "deadLog");    
+    // if(fNAlpidesAlongShort * fNAlpidesAlongLong == 4)
+    // {
+    //     G4VSolid* deadBox = new G4Box("deadBox", fDeadShortSide / 2, fAlpideThickness / 2, fLongSide / 2);
+    //     G4LogicalVolume *deadLog = new G4LogicalVolume(deadBox, nist->FindOrBuildMaterial("G4_Si"), "deadLog");    
 
-        // AVENGERS ASSEMBLE
-        G4AssemblyVolume* assemblePhy = new G4AssemblyVolume();
-        std::vector <G4ThreeVector> suppPositions {G4ThreeVector(fShortSide + fDeadShortSide / 2, fDeadCenter, fLongSide / 2), G4ThreeVector(fShortSide + fDeadShortSide / 2, fDeadCenter, -fLongSide / 2),
-                                                   G4ThreeVector(-(fShortSide + fDeadShortSide / 2), fDeadCenter, fLongSide / 2), G4ThreeVector(-(fShortSide + fDeadShortSide / 2), fDeadCenter, -fLongSide / 2)};
-        assemblePhy->AddPlacedVolume(deadLog, suppPositions[0], 0);
-        assemblePhy->AddPlacedVolume(deadLog, suppPositions[1], 0);
-        assemblePhy->AddPlacedVolume(deadLog, suppPositions[2], 0);
-        assemblePhy->AddPlacedVolume(deadLog, suppPositions[3], 0);
+    //     // AVENGERS ASSEMBLE
+    //     G4AssemblyVolume* assemblePhy = new G4AssemblyVolume();
+    //     std::vector <G4ThreeVector> suppPositions {G4ThreeVector(fShortSide + fDeadShortSide / 2, fDeadCenter, fLongSide / 2), G4ThreeVector(fShortSide + fDeadShortSide / 2, fDeadCenter, -fLongSide / 2),
+    //                                                G4ThreeVector(-(fShortSide + fDeadShortSide / 2), fDeadCenter, fLongSide / 2), G4ThreeVector(-(fShortSide + fDeadShortSide / 2), fDeadCenter, -fLongSide / 2)};
+    //     assemblePhy->AddPlacedVolume(deadLog, suppPositions[0], 0);
+    //     assemblePhy->AddPlacedVolume(deadLog, suppPositions[1], 0);
+    //     assemblePhy->AddPlacedVolume(deadLog, suppPositions[2], 0);
+    //     assemblePhy->AddPlacedVolume(deadLog, suppPositions[3], 0);
 
-        G4ThreeVector placement(0, 0, 0);
-        assemblePhy->MakeImprint(worldLog, placement, 0);
+    //     G4ThreeVector placement(0, 0, 0);
+    //     assemblePhy->MakeImprint(worldLog, placement, 0);
 
-        // Support Color settings
-        G4Colour graydead(160./255., 160./255., 160./255., 1.);
-        G4VisAttributes *visDead = new G4VisAttributes(graydead);
-        visDead->SetForceSolid(true);
-        deadLog->SetVisAttributes(visDead);
-    }
+    //     // Support Color settings
+    //     G4Colour graydead(160./255., 160./255., 160./255., 1.);
+    //     G4VisAttributes *visDead = new G4VisAttributes(graydead);
+    //     visDead->SetForceSolid(true);
+    //     deadLog->SetVisAttributes(visDead);
+    // }
 
     //////////////////////////////////////////////////////////////
     // Detector Support volume
     //////////////////////////////////////////////////////////////
-    if(fNAlpidesAlongShort * fNAlpidesAlongLong == 4) DetectorSupportConstruction2x2();
+    // if(fNAlpidesAlongShort * fNAlpidesAlongLong == 4) DetectorSupportConstruction2x2();
     //if(fNAlpidesAlongShort * fNAlpidesAlongLong == 8) DetectorSupportConstruction4x2();
 
 
     //////////////////////////////////////////////////////////////
     // Mylar volume (substrate between detector and gel)
     //////////////////////////////////////////////////////////////
-    G4VSolid *mylBox = new G4Box("mylarBox", fSupportShortSide / 2, fEFFMylThickness / 2, fSupportLongSide / 2);
-    G4VSolid *alBox = new G4Box("aluminumBox", fSupportShortSide / 2, fAlThickness / 2, fSupportLongSide / 2);
+    // G4VSolid *mylBox = new G4Box("mylarBox", fSupportShortSide / 2, fEFFMylThickness / 2, fSupportLongSide / 2);
+    // G4VSolid *alBox = new G4Box("aluminumBox", fSupportShortSide / 2, fAlThickness / 2, fSupportLongSide / 2);
 
-    G4LogicalVolume *mylLog = new G4LogicalVolume(mylBox, nist->FindOrBuildMaterial("G4_MYLAR"), "mylarLog");
-    G4LogicalVolume *alLog = new G4LogicalVolume(alBox, nist->FindOrBuildMaterial("G4_Al"), "aluminumLog");
+    // G4LogicalVolume *mylLog = new G4LogicalVolume(mylBox, nist->FindOrBuildMaterial("G4_MYLAR"), "mylarLog");
+    // G4LogicalVolume *alLog = new G4LogicalVolume(alBox, nist->FindOrBuildMaterial("G4_Al"), "aluminumLog");
 
-    G4Colour gray(250./255., 250./255., 250./255., .2);
-    G4VisAttributes *visMy = new G4VisAttributes(gray);
-    visMy->SetForceSolid(true);
-    mylLog->SetVisAttributes(visMy);
-    G4Colour darkGray(87./255., 87./255., 87./255., .4);
-    G4VisAttributes *visAl = new G4VisAttributes(darkGray);
-    visAl->SetForceSolid(true);
-    alLog->SetVisAttributes(visAl);
+    // G4Colour gray(250./255., 250./255., 250./255., .2);
+    // G4VisAttributes *visMy = new G4VisAttributes(gray);
+    // visMy->SetForceSolid(true);
+    // mylLog->SetVisAttributes(visMy);
+    // G4Colour darkGray(87./255., 87./255., 87./255., .4);
+    // G4VisAttributes *visAl = new G4VisAttributes(darkGray);
+    // visAl->SetForceSolid(true);
+    // alLog->SetVisAttributes(visAl);
 
-    G4VPhysicalVolume *mylPhy = new G4PVPlacement(0, G4ThreeVector(0, fMylarCenter, 0), mylLog, "mylarPhy", worldLog, false, 0);
-    G4VPhysicalVolume *alPhy = new G4PVPlacement(0, G4ThreeVector(0, fAluminumCenter, 0), alLog, "aluminumPhy", worldLog, false, 0);
+    // G4VPhysicalVolume *mylPhy = new G4PVPlacement(0, G4ThreeVector(0, fMylarCenter, 0), mylLog, "mylarPhy", worldLog, false, 0);
+    // G4VPhysicalVolume *alPhy = new G4PVPlacement(0, G4ThreeVector(0, fAluminumCenter, 0), alLog, "aluminumPhy", worldLog, false, 0);
 
 
     //////////////////////////////////////////////////////////////
     // Hydrogel volume
     //////////////////////////////////////////////////////////////
-    G4VSolid *gelBox = new G4Box("gelBox", fGelSize / 2, fGelThickness / 2, fGelSize / 2);
-    G4LogicalVolume *gelLog = new G4LogicalVolume(gelBox, scaffoldMaterial, "gelLog");
-    G4VPhysicalVolume *gelPhy = new G4PVPlacement(0, G4ThreeVector(0, fGelCenter, 0), gelLog, "gelPhy", worldLog, false, 0);
+    // G4VSolid *gelBox = new G4Box("gelBox", fGelSize / 2, fGelThickness / 2, fGelSize / 2);
+    // G4LogicalVolume *gelLog = new G4LogicalVolume(gelBox, scaffoldMaterial, "gelLog");
+    // G4VPhysicalVolume *gelPhy = new G4PVPlacement(0, G4ThreeVector(0, fGelCenter, 0), gelLog, "gelPhy", worldLog, false, 0);
 
-
+/*
     //////////////////////////////////////////////////////////////
     // Cells volume
     //////////////////////////////////////////////////////////////
@@ -415,17 +415,16 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
         if (fNsources == 1) cell_point = G4ThreeVector(0, fGelCenter, 0);
 
         // The 2 cells is a special case that can be studied with the following code
-        /*
-        G4ThreeVector cell_point1(x, y, z);
-        G4ThreeVector cell_point2(x, y, z);
-        if (fNsources == 2)
-        {
-            cell_point1 = G4ThreeVector(0, fGelCenter, 0.25*mm);
-            cell_point2 = G4ThreeVector(0, fGelCenter, -0.25*mm);
+        // G4ThreeVector cell_point1(x, y, z);
+        // G4ThreeVector cell_point2(x, y, z);
+        // if (fNsources == 2)
+        // {
+        //     cell_point1 = G4ThreeVector(0, fGelCenter, 0.25*mm);
+        //     cell_point2 = G4ThreeVector(0, fGelCenter, -0.25*mm);
 
-            position.push_back(cell_point1);
-            position.push_back(cell_point2);
-        }*/
+        //     position.push_back(cell_point1);
+        //     position.push_back(cell_point2);
+        // }
 
         G4int numberOfPositions = position.size();
         G4int k = 0;
@@ -455,7 +454,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
         cellPhy[i] = new G4PVPlacement(0, position[i], cellLog, "Cell_"+std::to_string(i), worldLog, false, 0);
     }
     
-
+*/
     // The Construct() method has to return the final (physical) world volume:
     return worldPhy;
 
