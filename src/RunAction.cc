@@ -11,6 +11,7 @@ RunAction::RunAction(DetectorConstruction* det) :
 
 void RunAction::BeginOfRunAction(const G4Run*)
 {
+  G4cout << "RunAction::BeginOfRunAction" << G4endl;
   // Register and create histograms
   auto man = G4AnalysisManager::Instance();
 

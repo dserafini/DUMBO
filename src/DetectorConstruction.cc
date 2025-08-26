@@ -159,6 +159,7 @@ void DetectorConstruction::DetectorSupportConstruction4x2()
 
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
+    G4cout << "DetectorConstruction::Construct" << G4endl;
     G4NistManager *nist = G4NistManager::Instance();
     DefineMaterial();
 

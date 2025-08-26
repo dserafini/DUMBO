@@ -29,6 +29,7 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
+    // G4cout << "PrimaryGeneratorAction::GeneratePrimaries" << G4endl;
     // GPS
     fGPS->GeneratePrimaryVertex(anEvent);
 
