@@ -15,7 +15,7 @@ using namespace std;
 PrimaryGeneratorAction::PrimaryGeneratorAction()
 {
     // GPS generation
-    //fGPS = new G4GeneralParticleSource();
+    fGPS = new G4GeneralParticleSource();
 
     // ParticleGun generation
     G4int nofParticles = 1;
@@ -30,7 +30,7 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
     // GPS
-    //fGPS->GeneratePrimaryVertex(anEvent);
+    fGPS->GeneratePrimaryVertex(anEvent);
 
     // ParticleGun (Ag-111)
     G4int Z = 47, A = 111; // Ag-111
@@ -55,6 +55,6 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     fParticleGun->SetParticlePosition(source);
 
     // Primary vertex generation
-    fParticleGun->GeneratePrimaryVertex(anEvent);
+    //fParticleGun->GeneratePrimaryVertex(anEvent);
 
 }

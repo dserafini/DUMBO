@@ -18,7 +18,7 @@ public:
 
 private:
     // GPS generation
-    //G4GeneralParticleSource* fGPS;
+    G4GeneralParticleSource* fGPS;
 
     // ParticelGun generation
     G4ParticleGun *fParticleGun;
