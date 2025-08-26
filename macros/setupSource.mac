@@ -1,9 +1,9 @@
 # ChangeMe. Update according to setup.
 # Set the particle type.
-# /gps/particle e-
+/gps/particle e-
 
 # Set the source position as well as its dimension
-#/gps/pos/centre 0 100 0 um
+/gps/pos/centre 0 100 0 um
 #/gps/pos/type Volume
 #/gps/pos/shape Para
 #/gps/pos/halfy 0.5 mm
@@ -16,3 +16,5 @@
 #/gps/ene/type Gauss
 #/gps/ene/min 0 MeV
 #/gps/ene/max 1 MeV
+/gps/energy 360 keV
+/gps/ang/type iso
