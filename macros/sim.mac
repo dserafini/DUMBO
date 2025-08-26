@@ -4,11 +4,21 @@
 /run/initialize
 
 # Call the macros for the setup of the source.
-/control/execute macros/setupSource.mac
+#/control/execute macros/setupSource.mac
+
+#/gun/particle electron
+#/gun/energy 360 keV
+#/gun/ang/type iso
+#/gun/position 0 10 0 mm
+
+/gps/particle e-
+/gps/pos/centre 0 100 0 um
+/gps/energy 360 keV
+/gps/ang/type iso
 
 
 # Run a given number of events (primary particles).
 # /run/beamOn 10000
 #/run/beamOn 7717295 # 15 min
 
-/run/beamOn 1
+/run/beamOn 1000
