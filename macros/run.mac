@@ -1,6 +1,12 @@
 /run/initialize
 
 /gps/particle e-
+#/gps/particle ion
+#/gps/ion 47 111 0 0.
+/gps/energy 360 keV
+#/gps/energy 0 eV
+/gps/ang/type iso
+#/gps/direction 0 0 1
 /gps/pos/centre 0 500 0 um
 /gps/pos/type Plane
 #/gps/pos/shape Square
@@ -14,10 +20,6 @@
 
 # la superficie del detector sta ad altezza y = 23 um
 # la direzione dall'alto (campione) verso il basso (chip) è 0 -1 0
-
-/gps/energy 360 keV
-/gps/ang/type iso
-#/gps/direction 0 0 1
 
 /run/printProgress 10000
 /run/beamOn 100000
