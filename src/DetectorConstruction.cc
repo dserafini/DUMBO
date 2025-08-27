@@ -17,12 +17,12 @@
 
 DetectorConstruction::DetectorConstruction()
 {
-    // Single ALPIDE chip creation
-    fPixAlongShort = fAlpidePixShort;
-    fPixAlongLong = fAlpidePixLong;
-    
-    fShortSide = fPixAlongShort * fAlpidePixShortSize;
-    fLongSide = fPixAlongLong * fAlpidePixLongSize;
+    fMessengerChip = new G4GenericMessenger(this, "/chip/", "Chip ALPIDE Construction");
+	fMessengerChip->DeclareProperty("shortSide", fAlpidePixShort, "default 512");
+	fMessengerChip->DeclareProperty("longSide", fAlpidePixLong, "default 1024");
+
+    fAlpidePixShort = 512; // Number of pixels along the ALPIDE's short side
+    fAlpidePixLong = 1024; // Number of pixels along the ALPIDE's long side
 }
 
 void DetectorConstruction::DefineMaterial()
@@ -160,6 +160,14 @@ void DetectorConstruction::DetectorSupportConstruction4x2()
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
     G4cout << "DetectorConstruction::Construct" << G4endl;
+
+    // Single ALPIDE chip creation
+    fPixAlongShort = fAlpidePixShort;
+    fPixAlongLong = fAlpidePixLong;
+    
+    fShortSide = fPixAlongShort * fAlpidePixShortSize;
+    fLongSide = fPixAlongLong * fAlpidePixLongSize;
+
     G4NistManager *nist = G4NistManager::Instance();
     DefineMaterial();
 
