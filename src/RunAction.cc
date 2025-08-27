@@ -43,6 +43,13 @@ void RunAction::BeginOfRunAction(const G4Run*)
   man->CreateNtupleDColumn("z");    //  3
   man->FinishNtuple();
 
+  man->CreateNtuple("Generated", "eventID, eGenKeV, x, z");
+  man->CreateNtupleIColumn("eventID");      // 0
+  man->CreateNtupleDColumn("eGenKeV"); //  1
+  man->CreateNtupleDColumn("x");    //  2
+  man->CreateNtupleDColumn("z");    //  3
+  man->FinishNtuple();
+
   
 
   man->OpenFile("../outputs/output.root"); // FILE NAME

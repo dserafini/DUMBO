@@ -9,6 +9,8 @@
 #include <G4GeneralParticleSource.hh>
 
 #include "PrimaryGeneratorAction.hh"
+#include <G4AnalysisManager.hh>
+#include "RunAction.hh"
 
 using namespace std;
 
@@ -60,4 +62,11 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     // Primary vertex generation
     //fParticleGun->GeneratePrimaryVertex(anEvent);
 */
+    G4int thisEventID = anEvent->GetEventID();
+	G4AnalysisManager *man = G4AnalysisManager::Instance();
+    man->FillNtupleIColumn(2, 0, thisEventID);
+    man->FillNtupleDColumn(2, 1, fGPS->GetParticleEnergy() / keV); // in keV
+    man->FillNtupleDColumn(2, 2, fGPS->GetParticlePosition().x() / mm); // in mm
+    man->FillNtupleDColumn(2, 3, fGPS->GetParticlePosition().z() / mm); // in mm
+    man->AddNtupleRow(2);
 }
