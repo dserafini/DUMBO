@@ -39,8 +39,8 @@ private:
     G4LogicalVolume* worldLog;
 
     // Alpide parameters 
-    G4int fAlpidePixShort = 8; // Number of pixels along the ALPIDE's short side
-    G4int fAlpidePixLong = 16; // Number of pixels along the ALPIDE's long side
+    G4int fAlpidePixShort = 512; // Number of pixels along the ALPIDE's short side
+    G4int fAlpidePixLong = 1024; // Number of pixels along the ALPIDE's long side
     G4double fAlpidePixLongSize = 28 * um; 
     G4double fAlpidePixShortSize = 28 * um; 
     G4double fAlpideThickness = 50 * um;
