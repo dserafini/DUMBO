@@ -1,5 +1,9 @@
 # This macro is used to properly set up the interactive session (GUI)
 
+/chip/shortSide 8
+/chip/longSide 16
+/run/reinitializeGeometry
+
 # Open the UI using Qt.
 /vis/open OGLSQt
 
@@ -12,7 +16,7 @@
 /vis/scene/endOfEventAction accumulate
 
 # Setup properly the primary source.
-/control/execute macros/setupSource.mac
+#/control/execute macros/setupSource.mac
 
 # Additional settings
 /vis/viewer/set/defaultColour 0 0 0 1
