@@ -18,23 +18,28 @@ void RunAction::BeginOfRunAction(const G4Run*)
   // Bidimensional histo containing the hits
   man->SetFirstHistoId(1);
   // Create H2
-  man->CreateH2("hitMap", "Hits in Pixel Array",
+  fIdHitMap = man->CreateH2("hitMap", "Hits in Pixel Array",
       fDetectorConstruction->GetzTotalNumberBins(), - fDetectorConstruction->GetzDetector(), fDetectorConstruction->GetzDetector(),
       fDetectorConstruction->GetxTotalNumberBins(), - fDetectorConstruction->GetxDetector(), fDetectorConstruction->GetxDetector());
 
   // Histo containing the deposited energy in single pixel
-  man->SetFirstHistoId(2);
   // Create H2 to retrieve the energy deposited in the pixels
-  man->CreateH1("enPixMap", "Deposited energy in Pixel", 200, 0, 20); // 0 - 0.1 keV, one bin every 0.0001 keV
+  fIdEnPix = man->CreateH1("enPixMap", "Deposited energy in Pixel", 200, 0, 20); // 0 - 0.1 keV, one bin every 0.0001 keV
 
   // Histo containing the deposited energy in single pixel
-  man->SetFirstHistoId(3);
   // Create H2 to retrieve the energy deposited in the pixels
-  man->CreateH1("HitPixNumber", "Number of Hit Pixels per event", 20, 0, 20); // 0 - 20 number of observed hits per event
+  fIdHitNum = man->CreateH1("HitPixNumber", "Number of Hit Pixels per event", 20, 0, 20); // 0 - 20 number of observed hits per event
 
   // Ntuple containing total number of particles detected per run
   man->CreateNtuple("PartPerRun", "Number of particles detectde per run");
   man->CreateNtupleIColumn("Particles");
+  man->FinishNtuple();
+
+  man->CreateNtuple("PixelHits", "eventID, eDepKeV, x, z");
+  man->CreateNtupleIColumn("eventID");      // 0
+  man->CreateNtupleDColumn("eDepKeV"); //  1
+  man->CreateNtupleDColumn("x");    //  2
+  man->CreateNtupleDColumn("z");    //  3
   man->FinishNtuple();
 
   man->OpenFile("../outputs/output.root"); // FILE NAME

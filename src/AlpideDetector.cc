@@ -2,6 +2,7 @@
 #include "G4HCofThisEvent.hh"
 #include "G4Step.hh"
 #include "G4SDManager.hh"
+#include "RunAction.hh"
 
 #include "G4VProcess.hh"
 #include <vector>
@@ -166,14 +167,15 @@ void AlpideDetector::EndOfEvent(G4HCofThisEvent*)
     interactingParticleCount ++;
   }
 
+  auto runAction = static_cast<const RunAction*>(G4RunManager::GetRunManager()->GetUserRunAction());
 
   // SAVING HISTOGRAMS AND NTUPLE (declared in RunAction.cc)
   if(hitEventCount != 0)
   {
     G4AnalysisManager* man = G4AnalysisManager::Instance();
-    man->FillH1(3, hitEventCount);
-    for (auto energy: depositedEnergyPerHit) man->FillH1(2, energy);
-    for (auto hit: hitsVector) man->FillH2(1, hit.first, hit.second);
+    man->FillH1(runAction->GetIdHitNum(), hitEventCount);
+    for (auto energy: depositedEnergyPerHit) man->FillH1(runAction->GetIdEnPix(), energy);
+    for (auto hit: hitsVector) man->FillH2(runAction->GetIdHitMap(), hit.first, hit.second);
     // Nutple
     man->AddNtupleRow();
     man->FillNtupleIColumn(0, interactingParticleCount);

@@ -23,11 +23,18 @@ public:
   void EndOfRunAction(const G4Run*);
 
 
+ G4int GetIdHitMap() const { return fIdHitMap; }
+    G4int GetIdEnPix() const { return fIdEnPix; }
+    G4int GetIdHitNum() const { return fIdHitNum; }
+
 private:
 
   // I want a pointer to DetectorConstuction to keep track of pixel number.
   DetectorConstruction*  fDetectorConstruction;
-
+  
+  G4int fIdHitMap;
+  G4int fIdEnPix;
+  G4int fIdHitNum;   
 };
 
 #endif
