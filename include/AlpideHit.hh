@@ -30,6 +30,10 @@ class AlpideHit : public G4VHit
 
     // This is used to get the correct pixel position
     void SetPosition(G4Step *aStep);
+    void SetDepositedEnergy(G4double edep) {fDepositedEnergy = edep;}
+    void SetPixelPosition(G4ThreeVector aVec) {fPixelPosition = aVec;}
+    void SetPixelCopyNo(G4int copyno) {fCopyNo = copyno;}
+    void SetParticleDefinition(const G4ParticleDefinition* def) {fParticleDef = def;}
 
     // Get different physical quantities
     G4double GetTrackEnergy() const       { return fEnergy; }
@@ -39,6 +43,12 @@ class AlpideHit : public G4VHit
     // For the hit pixel position.
     G4double GetHitPixelxPosition() const       { return fxPosition; }
     G4double GetHitPixelzPosition() const       { return fzPosition; }
+
+    G4ThreeVector GetPixelPosition() {return fPixelPosition;}
+    G4int GetPixelCopyNo() {return fCopyNo;}
+    const G4ParticleDefinition* GetParticleDefinition() {return fParticleDef;}
+    void SetTrackID(G4int id) { fTrackID = id; }
+    G4int GetTrackID() const { return fTrackID; }
 
 
 
@@ -52,6 +62,11 @@ class AlpideHit : public G4VHit
       // Hit pixel position.
       G4double fxPosition;
       G4double fzPosition;
+
+      G4ThreeVector fPixelPosition;
+      G4int fCopyNo;
+      const G4ParticleDefinition* fParticleDef;
+      G4int fTrackID; 
 
 };
 

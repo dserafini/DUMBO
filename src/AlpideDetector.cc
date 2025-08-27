@@ -134,6 +134,11 @@ G4bool AlpideDetector::ProcessHits(G4Step* aStep,
 
   stepCounter ++; // Increase step counter (variable to count how many steps are happening)
 
+
+  newHit->SetDepositedEnergy(aStep->GetTotalEnergyDeposit());
+  newHit->SetPixelPosition(G4ThreeVector(fxPosition, 0, fzPosition));
+  newHit->SetPixelCopyNo(pixCopyNumber);
+
   // Add to the HC
   fHitsCollection->insert(newHit);
 
@@ -190,4 +195,32 @@ void AlpideDetector::EndOfEvent(G4HCofThisEvent*)
   stepCounter = 0;
   depositedEnergy = 0;
 
+  std::map<int, double> energyPerPixel;
+  std::map<int, G4ThreeVector> posPerPixel;
+
+  G4int nofHits = fHitsCollection->entries();
+    for (G4int i = 0; i < nofHits; i++) {
+        AlpideHit* hit = (*fHitsCollection)[i];
+        int pixID = hit->GetPixelCopyNo();
+        double edep = hit->GetDepositedEnergy();
+        G4ThreeVector pos = hit->GetPixelPosition();
+
+        energyPerPixel[pixID] += edep;
+        posPerPixel[pixID] = pos;
+    }
+
+    G4AnalysisManager* man = G4AnalysisManager::Instance();
+    for (auto& entry : energyPerPixel) {
+        int pixelID = entry.first;
+        double edep = entry.second;
+        double x = posPerPixel[pixelID].getX();
+        double z = posPerPixel[pixelID].getZ();
+        G4int thisEventID = G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID();
+
+        man->FillNtupleIColumn(1, 0, thisEventID);
+        man->FillNtupleDColumn(1, 1, edep / keV); // in keV
+        man->FillNtupleDColumn(1, 2, x);
+        man->FillNtupleDColumn(1, 3, z);
+        man->AddNtupleRow(1);
+    }
 }
