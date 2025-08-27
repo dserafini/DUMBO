@@ -6,17 +6,18 @@
 RunAction::RunAction(DetectorConstruction* det) :
   G4UserRunAction(),
   fDetectorConstruction(det)
-{}
+{
+}
 
 
 void RunAction::BeginOfRunAction(const G4Run*)
 {
   G4cout << "RunAction::BeginOfRunAction" << G4endl;
   // Register and create histograms
+  
   auto man = G4AnalysisManager::Instance();
-
   // Bidimensional histo containing the hits
-  man->SetFirstHistoId(1);
+  // man->SetFirstHistoId(1);
   // Create H2
   fIdHitMap = man->CreateH2("hitMap", "Hits in Pixel Array",
       fDetectorConstruction->GetzTotalNumberBins(), - fDetectorConstruction->GetzDetector(), fDetectorConstruction->GetzDetector(),
@@ -42,7 +43,10 @@ void RunAction::BeginOfRunAction(const G4Run*)
   man->CreateNtupleDColumn("z");    //  3
   man->FinishNtuple();
 
+  
+
   man->OpenFile("../outputs/output.root"); // FILE NAME
+  // man->OpenFile(); // FILE NAME for macro setting
 }
 
 void RunAction::EndOfRunAction(const G4Run*)
