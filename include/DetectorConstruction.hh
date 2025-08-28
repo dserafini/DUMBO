@@ -49,7 +49,7 @@ private:
     G4double fDepletionThickness = 25 * um;
     // Configuration parameters (2x2 or 4x2)
     G4int fNAlpidesAlongShort = 2; // Number of ALPIDE detectors along their short side
-    G4int fNAlpidesAlongLong = 2; // Number of ALPIDE detectors along their long side
+    G4int fNAlpidesAlongLong = 1; // Number of ALPIDE detectors along their long side
     // Calculated internally
     G4int fPixAlongShort = -1;
     G4int fPixAlongLong = -1;
@@ -102,6 +102,7 @@ private:
     // Material definition function
     void DefineMaterial();
     // PCB construction function
+    void DetectorSupportConstruction1x2();
     void DetectorSupportConstruction2x2();
     void DetectorSupportConstruction4x2();
 

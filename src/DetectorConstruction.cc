@@ -67,6 +67,27 @@ void DetectorConstruction::DefineMaterial()
     FR4->AddMaterial(Epoxy, 0.4);
     FR4->AddMaterial(SiO_2, 0.6);
     
+}void DetectorConstruction::DetectorSupportConstruction1x2()
+{    
+    G4NistManager *nist = G4NistManager::Instance();
+
+    // SUPPORT VOLUME CONSTRUCTION
+    // 1) Base
+    // x is along short -> 512 px
+    // z is along long -> 1024 px
+    fSupportShortSide = fShortSide * fNAlpidesAlongShort;
+    fSupportLongSide = fLongSide * fNAlpidesAlongLong;
+    G4Box* suppBox = new G4Box("suppBox", fSupportShortSide / 2, fSupportThickness / 2, fSupportLongSide / 2);
+    G4LogicalVolume *suppLog = new G4LogicalVolume(suppBox, FR4, "suppLog");
+    new G4PVPlacement(0, G4ThreeVector(0, - fDepletionThickness / 2. - fNonSensitiveThickness - fSupportThickness / 2, 0), suppLog, "suppPhys", worldLog, false, 0, true);
+
+        
+    // Support Color settings
+    G4Colour deepGreen(28./255., 121./255., 93./255., 1.);
+    G4VisAttributes *visSupp = new G4VisAttributes(deepGreen);
+    visSupp->SetForceSolid(true);
+    suppLog->SetVisAttributes(visSupp);
+    
 }
 
 void DetectorConstruction::DetectorSupportConstruction2x2()
@@ -92,8 +113,10 @@ void DetectorConstruction::DetectorSupportConstruction2x2()
     // AVENGERS ASSEMBLE
     G4AssemblyVolume* assemblePhy = new G4AssemblyVolume();
     std::vector <G4ThreeVector> suppPositions {G4ThreeVector(0, fSupportCenter, 0), 
-                                               G4ThreeVector(fSupportHorizontalShortSide / 2 + fShortSide + fDeadShortSide, fSupportLateralCenter, 0), G4ThreeVector(-(fSupportHorizontalShortSide / 2 + fShortSide + fDeadShortSide), fSupportLateralCenter, 0),
-                                               G4ThreeVector(0, fSupportLateralCenter, fLongSide + fSupportVerticalLongSide / 2), G4ThreeVector(0, fSupportLateralCenter, -(fLongSide + fSupportVerticalLongSide / 2))};
+                                               G4ThreeVector(fSupportHorizontalShortSide / 2 + fShortSide + fDeadShortSide, fSupportLateralCenter, 0), 
+                                               G4ThreeVector(-(fSupportHorizontalShortSide / 2 + fShortSide + fDeadShortSide), fSupportLateralCenter, 0),
+                                               G4ThreeVector(0, fSupportLateralCenter, fLongSide + fSupportVerticalLongSide / 2), 
+                                               G4ThreeVector(0, fSupportLateralCenter, -(fLongSide + fSupportVerticalLongSide / 2))};
     assemblePhy->AddPlacedVolume(suppLog, suppPositions[0], 0);
     assemblePhy->AddPlacedVolume(hSuppLog, suppPositions[1], 0);
     assemblePhy->AddPlacedVolume(hSuppLog, suppPositions[2], 0);
@@ -219,8 +242,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     // Matrix replicas variables
     std::vector<G4ThreeVector> matPositions;
     // ALPIDE positions when they are in 4x2 or 2x2 configuration
-    if(fNAlpidesAlongShort * fNAlpidesAlongLong == 8)
-    {
+    if(fNAlpidesAlongShort ==2 &&  fNAlpidesAlongLong == 4) {
         G4double zSpacingLong = 3 * fLongSide/ 2; // Center shift along x-axis (longest distance)
         G4double zSpacingShort = fLongSide / 2; // Center shift along x-axis
         G4double xSpacing = fShortSide / 2; // Center shift along z-axis
@@ -229,12 +251,18 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
                          G4ThreeVector(-xSpacing, 0 , zSpacingShort), G4ThreeVector(-xSpacing, 0 , -zSpacingShort),
                          G4ThreeVector(xSpacing, 0 , zSpacingShort), G4ThreeVector(xSpacing, 0 , -zSpacingShort)};
     }
-    else 
-    {   
+    else if(fNAlpidesAlongShort ==2 &&  fNAlpidesAlongLong == 2) {   
         G4double xSpacing = fShortSide / 2; // Center shift along x-axis
         G4double zSpacing = fLongSide / 2; // Center shift along z-axis
         matPositions = {G4ThreeVector(-xSpacing, 0 , zSpacing), G4ThreeVector(xSpacing, 0 , zSpacing),
                         G4ThreeVector(-xSpacing, 0 , -zSpacing), G4ThreeVector(xSpacing, 0 , -zSpacing)};
+    }
+    else if(fNAlpidesAlongShort ==2 &&  fNAlpidesAlongLong == 1) {
+        G4double xSpacing = fShortSide / 2; // Center shift along x-axis
+        matPositions = {G4ThreeVector(-xSpacing, 0 , 0), G4ThreeVector(xSpacing, 0 , 0)};
+    }
+    else {
+        G4cout << "Unsupported ALPIDE configuration!" << G4endl;
     }
 
     // Matrix Logical/PhysicalVolume vectors                                          
@@ -315,6 +343,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     //////////////////////////////////////////////////////////////
     // if(fNAlpidesAlongShort * fNAlpidesAlongLong == 4) DetectorSupportConstruction2x2();
     //if(fNAlpidesAlongShort * fNAlpidesAlongLong == 8) DetectorSupportConstruction4x2();
+    if(fNAlpidesAlongShort * fNAlpidesAlongLong == 2) DetectorSupportConstruction1x2();
 
 
     //////////////////////////////////////////////////////////////
