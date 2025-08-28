@@ -17,6 +17,11 @@
 
 # Setup properly the primary source.
 #/control/execute macros/setupSource.mac
+/gps/particle e-
+/gps/energy 360 keV
+/gps/ang/type iso
+#/gps/direction 0 0 1
+/gps/position 0 25.5 0 um
 
 # Additional settings
 /vis/viewer/set/defaultColour 0 0 0 1
