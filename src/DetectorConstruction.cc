@@ -81,17 +81,19 @@ void DetectorConstruction::CollimatorConstruction1x2()
     // 1) Base
     // x is along short -> 512 px
     // z is along long -> 1024 px
-    G4double coll_x = fShortSide * fNAlpidesAlongShort * 0.8;
-    G4double coll_z = fLongSide * fNAlpidesAlongLong * 0.8;
+    G4double collShortSide = fShortSide * fNAlpidesAlongShort * 0.8;
+    G4double collLongSide = fLongSide * fNAlpidesAlongLong * 0.8;
     //G4double coll_y = 10 * mm ;
     G4double coll_thickness = 10 * mm / pixCompressionFactor; // 10 mm
     G4double hole_d = 5 * mm / pixCompressionFactor;    // 5 mm
+    G4double coll_gap = 0 * um;
+    G4double coll_center = fDepletionThickness/2. + fOxideThickness + coll_gap + coll_thickness/2.;
         
-    G4Box* collBox = new G4Box("collBox", coll_x/2.0,  coll_z/2.0, coll_thickness/2.0);
+    G4Box* collBox = new G4Box("collBox", collShortSide/2.0,  collLongSide/2.0, coll_thickness/2.);
     //std::cout << " COLLIMATOR dim x,y,z : " << coll_x << " , " <<  coll_y<< " , " << coll_z << std::endl;
 
-    G4Tubs* collHole = new G4Tubs("collHole", 0., hole_d/2. ,coll_thickness+10*um, 0., 2*M_PI*rad);
-    //G4Cylinder *callHole = new G4Cylinder("collHole", );
+    G4Tubs* collHole = new G4Tubs("collHole", 0., hole_d/2., coll_thickness/2. + 1 * um, 0., 2*M_PI*rad);
+    // 1 * um needed for numerical precision, otherwise the pocket is not passing through
 
     G4SubtractionSolid *collimator = new G4SubtractionSolid("collimator",collBox,collHole);
 
@@ -100,7 +102,7 @@ void DetectorConstruction::CollimatorConstruction1x2()
     pRot->rotateY(90*deg);
 
     G4LogicalVolume *collLog = new G4LogicalVolume(collimator, fAlu, "collLog");
-    new G4PVPlacement(pRot, G4ThreeVector(0, + fDepletionThickness / 2. + fNonSensitiveThickness + coll_thickness / 2., 0), collLog, "collPhys", worldLog, false, 0, true);
+    new G4PVPlacement(pRot, G4ThreeVector(0, coll_center, 0), collLog, "collPhys", worldLog, false, 0, true);
 
         
     // Support Color settings
@@ -123,7 +125,7 @@ void DetectorConstruction::DetectorSupportConstruction1x2()
     fSupportLongSide = fLongSide * fNAlpidesAlongLong;
     G4Box* suppBox = new G4Box("suppBox", fSupportShortSide / 2, fSupportThickness / 2, fSupportLongSide / 2);
     G4LogicalVolume *suppLog = new G4LogicalVolume(suppBox, FR4, "suppLog");
-    new G4PVPlacement(0, G4ThreeVector(0, - fDepletionThickness / 2. - fNonSensitiveThickness - fSupportThickness / 2, 0), suppLog, "suppPhys", worldLog, false, 0, true);
+    new G4PVPlacement(0, G4ThreeVector(0, fSupportCenter, 0), suppLog, "suppPhys", worldLog, false, 0, true);
 
         
     // Support Color settings

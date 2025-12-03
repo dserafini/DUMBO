@@ -46,7 +46,7 @@ private:
     G4int fAlpidePixLong; // Number of pixels along the ALPIDE's long side
     G4double fAlpidePixLongSize = 28 * um; 
     G4double fAlpidePixShortSize = 28 * um; 
-    G4double fAlpideThickness = 50 * um;
+    G4double fAlpideThickness = 50 * um; // = 25um (depletion) + 11um (oxide) + 14um (non-sensitive)
     // Depletion layer thickness (coinciding with the sensitive pixel's region volume)
     G4double fDepletionThickness = 25 * um;
     // Configuration parameters (2x2 or 4x2)
@@ -62,7 +62,7 @@ private:
     G4double fOxideCenter = fDepletionThickness / 2 + fOxideThickness / 2;
     G4Material* SiO_2;
     // Non-sensitive layer
-    G4double fNonSensitiveThickness = fAlpideThickness - fDepletionThickness - fOxideThickness;
+    G4double fNonSensitiveThickness = 14 * um;
     G4double fNonSensitiveCenter = - (fDepletionThickness / 2 + fNonSensitiveThickness / 2);
     // Dead volume 
     G4double fDeadShortSide = 1.2 * mm;
@@ -96,7 +96,7 @@ private:
     G4double fSupportShortSide = 5 * cm; 
     G4double fSupportLongSide = 10 * cm;
     G4double fSupportThickness = 1 * mm; 
-    G4double fSupportCenter = - (fSupportThickness / 2 + fAlpideThickness / 2);
+    G4double fSupportCenter = - (fDepletionThickness / 2 + fNonSensitiveThickness + fSupportThickness / 2);
     G4double fSupportLateralCenter = - (fAlpideThickness / 2 - fOxideThickness - fDepletionThickness / 2);
     // PCB material
     G4Material* FR4;
