@@ -30,6 +30,7 @@ class AlpideDetector : public G4VSensitiveDetector
     G4int pixCopyNumber;
     // Copy number vector
     std::vector<G4int> pixelCopyNumber;
+    G4int pixUniqueID;
 
     // Deposited energy per hit
     G4double depositedEnergy;

@@ -50,24 +50,38 @@ class AlpideHit : public G4VHit
     void SetTrackID(G4int id) { fTrackID = id; }
     G4int GetTrackID() const { return fTrackID; }
 
-
+    void SetMomentumSourceDecayElectron(G4ThreeVector mom) {fMomentumSourceDecayElectron=mom;}
+    G4ThreeVector GetMomentumSourceDecayElectron() {return fMomentumSourceDecayElectron;}
+    void SetInteractionPointSourceDecayElectron(G4ThreeVector pos) {fInteractionPointSourceDecayElectron=pos;}
+    G4ThreeVector GetInteractionPointSourceDecayElectron() {return fInteractionPointSourceDecayElectron;}
+    void SetFirstInteractionHit(G4int first) {fIsFirstInteractionHit = first;}
+    G4int IsFirstInteractionHit() {return fIsFirstInteractionHit;}
+    G4int GetPixelUniqueID() {return fPixUniqueID;}
+    void SetPixelUniqueID(G4int uid) {fPixUniqueID = uid;}
+    G4double GetKineticEnergySourceDecayElectron() {return fKinEneSourceDecayElectron;}
+    void SetKineticEnergySourceDecayElectron(G4double kine) {fKinEneSourceDecayElectron = kine;}
 
   private:
 
-      G4double fEnergy;
-      G4double fDepositedEnergy;
-      G4double fDepositedEnergyPixel0;
-      G4double firstPixelCopyNumber = -1.;
+    G4double fEnergy;
+    G4double fDepositedEnergy;
+    G4double fDepositedEnergyPixel0;
+    G4double firstPixelCopyNumber = -1.;
 
-      // Hit pixel position.
-      G4double fxPosition;
-      G4double fzPosition;
+    // Hit pixel position.
+    G4double fxPosition;
+    G4double fzPosition;
 
-      G4ThreeVector fPixelPosition;
-      G4int fCopyNo;
-      const G4ParticleDefinition* fParticleDef;
-      G4int fTrackID; 
+    G4ThreeVector fPixelPosition;
+    G4int fCopyNo;
+    const G4ParticleDefinition* fParticleDef;
+    G4int fTrackID; 
 
+    G4ThreeVector fMomentumSourceDecayElectron;
+    G4ThreeVector fInteractionPointSourceDecayElectron;
+    G4int fIsFirstInteractionHit = 0;
+    G4int fPixUniqueID = -1;
+    G4double fKinEneSourceDecayElectron;
 };
 
 // Definition of a HitColletion

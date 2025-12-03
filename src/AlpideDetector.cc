@@ -72,6 +72,7 @@ G4bool AlpideDetector::ProcessHits(G4Step* aStep,
   //if (aStep->GetTrack()->GetParticleDefinition()->GetParticleName() != "gamma") return false;
 
   AlpideHit* newHit = new AlpideHit();
+  newHit->SetFirstInteractionHit(0);
 
   // Get the incoming kinetic energy
   newHit->SetTrackEnergy(aStep->GetTrack()->GetKineticEnergy());
@@ -87,6 +88,10 @@ G4bool AlpideDetector::ProcessHits(G4Step* aStep,
   G4VPhysicalVolume *phyPixel = TH->GetVolume();
   G4VPhysicalVolume *phyColumn = TH->GetVolume(1);
   G4VPhysicalVolume *phyMatrix = TH->GetVolume(2);
+  
+  // VALE SOLO PER LA 2x1 - per generalizzare vanno recuperate le info da DetectorConstruction...
+  pixUniqueID = TH->GetVolume()->GetCopyNo() * 512 + TH->GetVolume(1)->GetCopyNo() + TH->GetVolume(2)->GetCopyNo()*512*1024;
+  
   // x position (column inside matrix)
   G4ThreeVector posColumn = phyColumn->GetTranslation() + phyMatrix->GetTranslation();
   // z position (along column)
@@ -103,6 +108,41 @@ G4bool AlpideDetector::ProcessHits(G4Step* aStep,
     depositedEnergy += 1000 * aStep->GetTotalEnergyDeposit(); // update energy in keVs
     fxPosition = posColumn[0]; // Retrieve pixel position along detector's short side
     fzPosition = posPixel[2]; // Retrieve pixel position along detector's long side
+
+    //---------------------------
+    auto track = aStep->GetTrack();
+
+    if (track) {
+      auto trackID = track->GetTrackID();
+      auto trackParentID = track->GetParentID();  // ParentID = 1 per le primarie
+      auto pdef = track->GetParticleDefinition();    	    	
+      auto tmom = track->GetMomentum();
+      auto tpos = track->GetPosition();	
+      auto tkin = track->GetKineticEnergy();	
+      auto creatorProcess = track->GetCreatorProcess();
+      //std::cout << "track - ID: " << trackID << "  parentID: " << trackParentID << "   part name:" << pdef->GetParticleName() << "  moment: " << tmom << " = " << tmom.mag() << "   pos : " << tpos << std::endl;
+      //if (creatorProcess) std::cout << "---> creator process: " << creatorProcess->GetProcessName() << std::endl;
+      
+      if (pdef) {
+        bool set1=0;
+        if ( creatorProcess) {	  
+          // electron from ion decay or as particle gun
+          if (creatorProcess->GetProcessName() == "RadioactiveDecay" && pdef->GetParticleName() == "e-" && trackParentID == 1) set1=1;
+      }
+      else { // no creator process => primary
+        if (trackID==1 && pdef->GetParticleName() == "e-") set1=1; // double check
+      }
+      
+      if (set1) {
+        //std::cout << "  got primary electron with momentum " << tmom << " in position " << tpos << std::endl;
+        newHit->SetMomentumSourceDecayElectron(tmom);
+        newHit->SetInteractionPointSourceDecayElectron(tpos);
+        newHit->SetFirstInteractionHit(1);
+        newHit->SetKineticEnergySourceDecayElectron(tkin);
+        //fInteractionPointSourceDecayElectron = tpos;
+        }	  	  
+      }	
+    }
   }
 
   // IF it is not the first step inside the sensitive volume (i.e. stepCounter != 0) 
@@ -112,6 +152,8 @@ G4bool AlpideDetector::ProcessHits(G4Step* aStep,
     depositedEnergy += 1000 * aStep->GetTotalEnergyDeposit();// update energy in keVs (keep adding for each step inside a fixed pixel to understand how much energy was released inside that)
     fxPosition = posColumn[0];
     fzPosition = posPixel[2];
+
+    
   }
 
   // IF it is not the first step inside a fixed sensitive pixel (i.e. stepCounter != 0) 
@@ -138,6 +180,7 @@ G4bool AlpideDetector::ProcessHits(G4Step* aStep,
   newHit->SetDepositedEnergy(aStep->GetTotalEnergyDeposit());
   newHit->SetPixelPosition(G4ThreeVector(fxPosition, 0, fzPosition));
   newHit->SetPixelCopyNo(pixCopyNumber);
+  newHit->SetPixelUniqueID(pixUniqueID);
 
   // Add to the HC
   fHitsCollection->insert(newHit);
@@ -197,16 +240,31 @@ void AlpideDetector::EndOfEvent(G4HCofThisEvent*)
 
   std::map<int, double> energyPerPixel;
   std::map<int, G4ThreeVector> posPerPixel;
+  std::map<int, bool> isFirst;
+
+  G4ThreeVector fstMom; fstMom *= 0.0;
+  G4ThreeVector fstPos; fstPos *= 0.0;
+  G4double fstKine = 0.0;
 
   G4int nofHits = fHitsCollection->entries();
     for (G4int i = 0; i < nofHits; i++) {
-        AlpideHit* hit = (*fHitsCollection)[i];
-        int pixID = hit->GetPixelCopyNo();
-        double edep = hit->GetDepositedEnergy();
-        G4ThreeVector pos = hit->GetPixelPosition();
-
+      AlpideHit* hit = (*fHitsCollection)[i];
+      int pixID = hit->GetPixelCopyNo();
+      int pixUID = hit->GetPixelUniqueID();
+      double edep = hit->GetDepositedEnergy();
+      G4ThreeVector pos = hit->GetPixelPosition();
+      if (pixUID>=0) { // NEW
         energyPerPixel[pixID] += edep;
         posPerPixel[pixID] = pos;
+        if (hit->IsFirstInteractionHit()) {
+          isFirst[pixUID] = 1; // NEW
+          fstMom = hit->GetMomentumSourceDecayElectron();
+          fstPos = hit->GetInteractionPointSourceDecayElectron();
+          fstKine = hit->GetKineticEnergySourceDecayElectron();
+        }
+      } else {
+        std::cout << " WARNING! strange pixelUniqueID - pixID = " << pixID << "    pos = " << pos << std::endl;
+      }
     }
 
     G4AnalysisManager* man = G4AnalysisManager::Instance();
@@ -221,6 +279,15 @@ void AlpideDetector::EndOfEvent(G4HCofThisEvent*)
         man->FillNtupleDColumn(1, 1, edep / keV); // in keV
         man->FillNtupleDColumn(1, 2, x);
         man->FillNtupleDColumn(1, 3, z);
+        man->FillNtupleDColumn(1, 4, isFirst[pixelID]);
+        man->FillNtupleDColumn(1, 5, fstMom.getX());
+        man->FillNtupleDColumn(1, 6, fstMom.getY());
+        man->FillNtupleDColumn(1, 7, fstMom.getZ());
+        man->FillNtupleDColumn(1, 8, fstPos.getX());
+        man->FillNtupleDColumn(1, 9, fstPos.getY());
+        man->FillNtupleDColumn(1, 10, fstPos.getZ());
+        man->FillNtupleDColumn(1, 11, fstKine);
+        man->FillNtupleDColumn(1, 12, pixelID);
         man->AddNtupleRow(1);
     }
 }
