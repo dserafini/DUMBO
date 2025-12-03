@@ -98,6 +98,9 @@ private:
     G4double fSupportLateralCenter = - (fAlpideThickness / 2 - fOxideThickness - fDepletionThickness / 2);
     // PCB material
     G4Material* FR4;
+    
+    // collimator material
+    G4Material* fAlu;
 
     // Material definition function
     void DefineMaterial();

@@ -66,8 +66,12 @@ void DetectorConstruction::DefineMaterial()
     FR4 = new G4Material("FR4", 1.86 * g/cm3, 2);
     FR4->AddMaterial(Epoxy, 0.4);
     FR4->AddMaterial(SiO_2, 0.6);
-    
-}void DetectorConstruction::DetectorSupportConstruction1x2()
+
+    // Aluminum material
+    fAlu = nist->FindOrBuildMaterial("G4_Al");
+}
+
+void DetectorConstruction::DetectorSupportConstruction1x2()
 {    
     G4NistManager *nist = G4NistManager::Instance();
 
