@@ -21,4 +21,7 @@
 # /run/beamOn 10000
 #/run/beamOn 7717295 # 15 min
 
+/analysis/setFileName output.root
+
 /run/beamOn 1000
+

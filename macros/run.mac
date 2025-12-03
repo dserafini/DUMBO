@@ -31,5 +31,8 @@
 # la superficie del detector (Oxide layer) sta ad altezza y = 23.5 um
 # la direzione dall'alto (campione) verso il basso (chip) è 0 -1 0
 
+/analysis/setFileName output.root
+
 /run/printProgress 10000
 /run/beamOn 100000
+

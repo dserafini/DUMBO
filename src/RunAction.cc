@@ -61,8 +61,8 @@ void RunAction::BeginOfRunAction(const G4Run*)
 
   
 
-  man->OpenFile("../outputs/output.root"); // FILE NAME
-  // man->OpenFile(); // FILE NAME for macro setting
+  // man->OpenFile("../outputs/output.root"); // FILE NAME
+  man->OpenFile(); // FILE NAME for macro setting
 }
 
 void RunAction::EndOfRunAction(const G4Run*)
