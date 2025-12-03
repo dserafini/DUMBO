@@ -41,6 +41,15 @@ void RunAction::BeginOfRunAction(const G4Run*)
   man->CreateNtupleDColumn("eDepKeV"); //  1
   man->CreateNtupleDColumn("x");    //  2
   man->CreateNtupleDColumn("z");    //  3
+  man->CreateNtupleDColumn("isFirst");  //  4
+  man->CreateNtupleDColumn("fstPx");    //  5
+  man->CreateNtupleDColumn("fstPy");    //  6
+  man->CreateNtupleDColumn("fstPz");    //  7
+  man->CreateNtupleDColumn("fstIx");    //  8
+  man->CreateNtupleDColumn("fstIy");    //  9
+  man->CreateNtupleDColumn("fstIz");    //  10
+  man->CreateNtupleDColumn("fstEkin");    //  11
+  man->CreateNtupleDColumn("pixID");    //  12
   man->FinishNtuple();
 
   man->CreateNtuple("Generated", "eventID, eGenKeV, x, z");
