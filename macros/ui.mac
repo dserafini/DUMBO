@@ -28,4 +28,6 @@
 /vis/viewer/set/background 1 1 1 0
 /vis/scene/endOfEventAction accumulate 0
 
+/vis/scene/add/axes
+
 /analysis/setFileName output.root
