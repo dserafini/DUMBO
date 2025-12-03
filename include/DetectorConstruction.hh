@@ -34,6 +34,8 @@ public:
     G4double GetxTotalNumberBins () const      {return fNAlpidesAlongShort * fAlpidePixShort;}
     G4double GetzTotalNumberBins () const      {return fNAlpidesAlongLong * fAlpidePixLong;}
 
+    G4double pixCompressionFactor = 1.0;
+
 private:
 
     // World volume
@@ -98,16 +100,20 @@ private:
     G4double fSupportLateralCenter = - (fAlpideThickness / 2 - fOxideThickness - fDepletionThickness / 2);
     // PCB material
     G4Material* FR4;
-    
+
     // collimator material
     G4Material* fAlu;
 
     // Material definition function
     void DefineMaterial();
+
     // PCB construction function
     void DetectorSupportConstruction1x2();
     void DetectorSupportConstruction2x2();
     void DetectorSupportConstruction4x2();
+
+    // collimator construction function
+    void CollimatorConstruction1x2();    
 
 	G4GenericMessenger *fMessengerChip;
 

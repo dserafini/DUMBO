@@ -10,6 +10,8 @@
 #include <Randomize.hh>
 #include <G4UnionSolid.hh> 
 #include <G4AssemblyVolume.hh>
+#include "G4SubtractionSolid.hh"
+#include <G4Tubs.hh>
 
 #include "DetectorConstruction.hh"
 #include "AlpideDetector.hh"
@@ -69,6 +71,44 @@ void DetectorConstruction::DefineMaterial()
 
     // Aluminum material
     fAlu = nist->FindOrBuildMaterial("G4_Al");
+}
+
+void DetectorConstruction::CollimatorConstruction1x2()
+{    
+    G4NistManager *nist = G4NistManager::Instance();
+
+    // SUPPORT VOLUME CONSTRUCTION
+    // 1) Base
+    // x is along short -> 512 px
+    // z is along long -> 1024 px
+    G4double coll_x = fShortSide * fNAlpidesAlongShort * 0.8;
+    G4double coll_z = fLongSide * fNAlpidesAlongLong * 0.8;
+    //G4double coll_y = 10 * mm ;
+    G4double coll_thickness = 10 * mm / pixCompressionFactor; // 10 mm
+    G4double hole_d = 5 * mm / pixCompressionFactor;    // 5 mm
+        
+    G4Box* collBox = new G4Box("collBox", coll_x/2.0,  coll_z/2.0, coll_thickness/2.0);
+    //std::cout << " COLLIMATOR dim x,y,z : " << coll_x << " , " <<  coll_y<< " , " << coll_z << std::endl;
+
+    G4Tubs* collHole = new G4Tubs("collHole", 0., hole_d/2. ,coll_thickness+10*um, 0., 2*M_PI*rad);
+    //G4Cylinder *callHole = new G4Cylinder("collHole", );
+
+    G4SubtractionSolid *collimator = new G4SubtractionSolid("collimator",collBox,collHole);
+
+    G4RotationMatrix *pRot = new G4RotationMatrix;
+    pRot->rotateZ(90*deg);
+    pRot->rotateY(90*deg);
+
+    G4LogicalVolume *collLog = new G4LogicalVolume(collimator, fAlu, "collLog");
+    new G4PVPlacement(pRot, G4ThreeVector(0, + fDepletionThickness / 2. + fNonSensitiveThickness + coll_thickness / 2., 0), collLog, "collPhys", worldLog, false, 0, true);
+
+        
+    // Support Color settings
+    //G4Colour deepGreen(28./255., 50./255., 93./255., 1.);
+    G4VisAttributes *visColl = new G4VisAttributes(G4Colour::Gray());
+    visColl->SetForceSolid(true);
+    collLog->SetVisAttributes(visColl);
+    
 }
 
 void DetectorConstruction::DetectorSupportConstruction1x2()
@@ -187,6 +227,7 @@ void DetectorConstruction::DetectorSupportConstruction4x2()
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
     G4cout << "DetectorConstruction::Construct" << G4endl;
+    pixCompressionFactor = 1024./fAlpidePixLong;
 
     // Single ALPIDE chip creation
     fPixAlongShort = fAlpidePixShort;
@@ -347,8 +388,10 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     //////////////////////////////////////////////////////////////
     // if(fNAlpidesAlongShort * fNAlpidesAlongLong == 4) DetectorSupportConstruction2x2();
     //if(fNAlpidesAlongShort * fNAlpidesAlongLong == 8) DetectorSupportConstruction4x2();
-    if(fNAlpidesAlongShort * fNAlpidesAlongLong == 2) DetectorSupportConstruction1x2();
-
+    if(fNAlpidesAlongShort * fNAlpidesAlongLong == 2) {
+        DetectorSupportConstruction1x2();
+        CollimatorConstruction1x2();
+    }
 
     //////////////////////////////////////////////////////////////
     // Mylar volume (substrate between detector and gel)
