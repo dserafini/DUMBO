@@ -229,6 +229,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     G4cout << "DetectorConstruction::Construct" << G4endl;
     pixCompressionFactor = 1024./fAlpidePixLong;
 
+    G4cout << "       STARTING BUILDING DETECTOR USING fAlpidePixShort = " << fAlpidePixShort << " AND fAlpidePixLong = "  << fAlpidePixLong << "  => compr. factor " << pixCompressionFactor << G4endl;
+
     // Single ALPIDE chip creation
     fPixAlongShort = fAlpidePixShort;
     fPixAlongLong = fAlpidePixLong;
