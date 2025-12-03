@@ -1,0 +1,43 @@
+/chip/shortSide 512
+/chip/longSide 1024
+
+/run/reinitializeGeometry
+
+/run/initialize
+/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+3 year
+
+# set source
+#/gps/particle e-
+/gps/particle ion
+/gps/ion 38 90 0 0.
+/gps/energy 0 eV
+
+# set source shape
+/gps/ang/type iso
+#/gps/direction 0 0 -1
+/gps/pos/centre 0 500 0 um
+/gps/pos/type Plane
+#/gps/pos/shape Square
+/gps/pos/shape Circle
+#/gps/pos/halfx 1 mm
+#/gps/pos/halfy 1 mm
+/gps/pos/radius 2 mm
+/gps/pos/rot1 1 0 0
+/gps/pos/rot2 0 0 1
+
+# set (and force) point like source
+#/gps/position 0 23.5 0 um
+/gps/position 0 0.100 0 mm
+
+#/gps/ene/type Gauss
+#/gps/energy 360 keV
+#/gps/ene/mono 360 keV
+#/gps/ene/sigma 200 keV
+
+# la superficie del detector (Oxide layer) sta ad altezza y = 23.5 um
+# la direzione dall'alto (campione) verso il basso (chip) è 0 -1 0
+
+/analysis/setFileName outputSr.root
+
+/run/printProgress 10000
+/run/beamOn 10000
