@@ -26,7 +26,7 @@
 
 # set (and force) point like source
 #/gps/position 0 23.5 0 um
-/gps/position 0 10.1 0 mm
+/gps/position 0 1 0 mm
 
 #/gps/ene/type Gauss
 #/gps/energy 360 keV
