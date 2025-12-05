@@ -31,22 +31,17 @@ class AlpideHit : public G4VHit
     // This is used to get the correct pixel position
     void SetPosition(G4Step *aStep);
     void SetDepositedEnergy(G4double edep) {fDepositedEnergy = edep;}
-    void SetPixelPosition(G4ThreeVector aVec) {fPixelPosition = aVec;}
-    void SetPixelCopyNo(G4int copyno) {fCopyNo = copyno;}
-    void SetParticleDefinition(const G4ParticleDefinition* def) {fParticleDef = def;}
-
-    // Get different physical quantities
-    G4double GetTrackEnergy() const       { return fEnergy; }
     G4double GetDepositedEnergy() const       { return fDepositedEnergy; }
+    void SetPixelPosition(G4ThreeVector aVec) {fPixelPosition = aVec;}
+    G4ThreeVector GetPixelPosition() {return fPixelPosition;}
+    void SetPixelCopyNo(G4int copyno) {fCopyNo = copyno;}
+    G4int GetPixelCopyNo() {return fCopyNo;}
+    void SetParticleDefinition(const G4ParticleDefinition* def) {fParticleDef = def;}
+    const G4ParticleDefinition* GetParticleDefinition() {return fParticleDef;}
+    G4double GetTrackEnergy() const       { return fEnergy; }
     G4double GetDepositedEnergyPixel0() const       { return fDepositedEnergyPixel0; }
-
-    // For the hit pixel position.
     G4double GetHitPixelxPosition() const       { return fxPosition; }
     G4double GetHitPixelzPosition() const       { return fzPosition; }
-
-    G4ThreeVector GetPixelPosition() {return fPixelPosition;}
-    G4int GetPixelCopyNo() {return fCopyNo;}
-    const G4ParticleDefinition* GetParticleDefinition() {return fParticleDef;}
     void SetTrackID(G4int id) { fTrackID = id; }
     G4int GetTrackID() const { return fTrackID; }
 
@@ -56,8 +51,8 @@ class AlpideHit : public G4VHit
     G4ThreeVector GetInteractionPointSourceDecayElectron() {return fInteractionPointSourceDecayElectron;}
     void SetFirstInteractionHit(G4int first) {fIsFirstInteractionHit = first;}
     G4int IsFirstInteractionHit() {return fIsFirstInteractionHit;}
-    G4int GetPixelUniqueID() {return fPixUniqueID;}
     void SetPixelUniqueID(G4int uid) {fPixUniqueID = uid;}
+    G4int GetPixelUniqueID() {return fPixUniqueID;}
     G4double GetKineticEnergySourceDecayElectron() {return fKinEneSourceDecayElectron;}
     void SetKineticEnergySourceDecayElectron(G4double kine) {fKinEneSourceDecayElectron = kine;}
 
