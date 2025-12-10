@@ -15,11 +15,9 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 # We presume the existence of three directories
 file(GLOB_RECURSE sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB_RECURSE headers ${PROJECT_SOURCE_DIR}/include/*.hh)
-file(GLOB_RECURSE macros_mac RELATIVE ${PROJECT_SOURCE_DIR} macros/*.mac)
-file(GLOB_RECURSE macros_sh  RELATIVE ${PROJECT_SOURCE_DIR} macros/*.sh)
+file(GLOB_RECURSE macros RELATIVE ${PROJECT_SOURCE_DIR} macros/*.mac)
 
 # Enable macros for out-of-source build
-set(macros ${macros_mac} ${macros_sh})
 foreach(_file ${macros})
   configure_file(
     ${_file}
