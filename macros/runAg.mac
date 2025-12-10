@@ -1,5 +1,6 @@
 /chip/shortSide 512
 /chip/longSide 1024
+/chip/collimator 0
 
 /run/reinitializeGeometry
 
@@ -26,7 +27,7 @@
 
 # set (and force) point like source
 #/gps/position 0 23.5 0 um
-/gps/position 0 1 0 mm
+/gps/pos/centre 2.5 1 0 mm
 
 #/gps/ene/type Gauss
 #/gps/energy 360 keV
@@ -36,7 +37,17 @@
 # la superficie del detector (Oxide layer) sta ad altezza y = 23.5 um
 # la direzione dall'alto (campione) verso il basso (chip) è 0 -1 0
 
-/analysis/setFileName outputAg.root
 
-/run/printProgress 10000
-/run/beamOn 100000
+/run/printProgress 100000
+
+/gps/pos/centre -7.5 1 0 mm
+/analysis/setFileName outputAg1.root
+#/run/beamOn 1000000
+
+/gps/pos/centre -2.5 1 0 mm
+/analysis/setFileName outputAg2.root
+#/run/beamOn 1000000
+
+/gps/pos/centre 2.5 1 0 mm
+/analysis/setFileName outputAg3.root
+/run/beamOn 1000000

@@ -2,6 +2,7 @@
 
 /chip/shortSide 8
 /chip/longSide 16
+/chip/collimator 1
 /run/reinitializeGeometry
 
 # Open the UI using Qt.
