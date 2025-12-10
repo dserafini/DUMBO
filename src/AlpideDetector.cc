@@ -247,47 +247,47 @@ void AlpideDetector::EndOfEvent(G4HCofThisEvent*)
   G4double fstKine = 0.0;
 
   G4int nofHits = fHitsCollection->entries();
-    for (G4int i = 0; i < nofHits; i++) {
-      AlpideHit* hit = (*fHitsCollection)[i];
-      int pixID = hit->GetPixelCopyNo();
-      int pixUID = hit->GetPixelUniqueID();
-      double edep = hit->GetDepositedEnergy();
-      G4ThreeVector pos = hit->GetPixelPosition();
-      if (pixUID>=0) { // NEW
-        energyPerPixel[pixID] += edep;
-        posPerPixel[pixID] = pos;
-        if (hit->IsFirstInteractionHit()) {
-          isFirst[pixUID] = 1; // NEW
-          fstMom = hit->GetMomentumSourceDecayElectron();
-          fstPos = hit->GetInteractionPointSourceDecayElectron();
-          fstKine = hit->GetKineticEnergySourceDecayElectron();
-        }
-      } else {
-        std::cout << " WARNING! strange pixelUniqueID - pixID = " << pixID << "    pos = " << pos << std::endl;
+  for (G4int i = 0; i < nofHits; i++) {
+    AlpideHit* hit = (*fHitsCollection)[i];
+    int pixID = hit->GetPixelCopyNo();
+    int pixUID = hit->GetPixelUniqueID();
+    double edep = hit->GetDepositedEnergy();
+    G4ThreeVector pos = hit->GetPixelPosition();
+    if (pixUID>=0) { // NEW
+      energyPerPixel[pixID] += edep;
+      posPerPixel[pixID] = pos;
+      if (hit->IsFirstInteractionHit()) {
+        isFirst[pixUID] = 1; // NEW
+        fstMom = hit->GetMomentumSourceDecayElectron();
+        fstPos = hit->GetInteractionPointSourceDecayElectron();
+        fstKine = hit->GetKineticEnergySourceDecayElectron();
       }
+    } else {
+      std::cout << " WARNING! strange pixelUniqueID - pixID = " << pixID << "    pos = " << pos << std::endl;
     }
+  }
 
-    G4AnalysisManager* man = G4AnalysisManager::Instance();
-    for (auto& entry : energyPerPixel) {
-        int pixelID = entry.first;
-        double edep = entry.second;
-        double x = posPerPixel[pixelID].getX();
-        double z = posPerPixel[pixelID].getZ();
-        G4int thisEventID = G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID();
+  G4AnalysisManager* man = G4AnalysisManager::Instance();
+  for (auto& entry : energyPerPixel) {
+    int pixelID = entry.first;
+    double edep = entry.second;
+    double x = posPerPixel[pixelID].getX();
+    double z = posPerPixel[pixelID].getZ();
+    G4int thisEventID = G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID();
 
-        man->FillNtupleIColumn(1, 0, thisEventID);
-        man->FillNtupleDColumn(1, 1, edep / keV); // in keV
-        man->FillNtupleDColumn(1, 2, x);
-        man->FillNtupleDColumn(1, 3, z);
-        man->FillNtupleDColumn(1, 4, isFirst[pixelID]);
-        man->FillNtupleDColumn(1, 5, fstMom.getX());
-        man->FillNtupleDColumn(1, 6, fstMom.getY());
-        man->FillNtupleDColumn(1, 7, fstMom.getZ());
-        man->FillNtupleDColumn(1, 8, fstPos.getX());
-        man->FillNtupleDColumn(1, 9, fstPos.getY());
-        man->FillNtupleDColumn(1, 10, fstPos.getZ());
-        man->FillNtupleDColumn(1, 11, fstKine);
-        man->FillNtupleDColumn(1, 12, pixelID);
-        man->AddNtupleRow(1);
-    }
+    man->FillNtupleIColumn(1, 0, thisEventID);
+    man->FillNtupleDColumn(1, 1, edep / keV); // in keV
+    man->FillNtupleDColumn(1, 2, x);
+    man->FillNtupleDColumn(1, 3, z);
+    man->FillNtupleDColumn(1, 4, isFirst[pixelID]);
+    man->FillNtupleDColumn(1, 5, fstMom.getX());
+    man->FillNtupleDColumn(1, 6, fstMom.getY());
+    man->FillNtupleDColumn(1, 7, fstMom.getZ());
+    man->FillNtupleDColumn(1, 8, fstPos.getX());
+    man->FillNtupleDColumn(1, 9, fstPos.getY());
+    man->FillNtupleDColumn(1, 10, fstPos.getZ());
+    man->FillNtupleDColumn(1, 11, fstKine);
+    man->FillNtupleDColumn(1, 12, pixelID);
+    man->AddNtupleRow(1);
+  }
 }
