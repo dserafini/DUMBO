@@ -102,6 +102,7 @@ private:
     G4Material* FR4;
 
     // collimator material
+    G4int fCollimatorBuild;
     G4Material* fAlu;
 
     // Material definition function

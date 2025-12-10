@@ -22,9 +22,11 @@ DetectorConstruction::DetectorConstruction()
     fMessengerChip = new G4GenericMessenger(this, "/chip/", "Chip ALPIDE Construction");
 	fMessengerChip->DeclareProperty("shortSide", fAlpidePixShort, "default 512");
 	fMessengerChip->DeclareProperty("longSide", fAlpidePixLong, "default 1024");
+	fMessengerChip->DeclareProperty("collimator", fCollimatorBuild, "default 0");
 
     fAlpidePixShort = 512; // Number of pixels along the ALPIDE's short side
     fAlpidePixLong = 1024; // Number of pixels along the ALPIDE's long side
+    fCollimatorBuild = 0; // No collimator by default
 }
 
 void DetectorConstruction::DefineMaterial()
@@ -394,7 +396,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     //if(fNAlpidesAlongShort * fNAlpidesAlongLong == 8) DetectorSupportConstruction4x2();
     if(fNAlpidesAlongShort * fNAlpidesAlongLong == 2) {
         DetectorSupportConstruction1x2();
-        CollimatorConstruction1x2();
+        if (fCollimatorBuild == 1)
+            CollimatorConstruction1x2();
     }
 
     //////////////////////////////////////////////////////////////
