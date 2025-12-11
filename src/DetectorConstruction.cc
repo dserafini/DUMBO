@@ -20,10 +20,14 @@
 DetectorConstruction::DetectorConstruction()
 {
     fMessengerChip = new G4GenericMessenger(this, "/chip/", "Chip ALPIDE Construction");
+	fMessengerChip->DeclareProperty("Nshort", fNAlpidesAlongShort, "default 2");
+	fMessengerChip->DeclareProperty("Nlong", fNAlpidesAlongLong, "default 1");
 	fMessengerChip->DeclareProperty("shortSide", fAlpidePixShort, "default 512");
 	fMessengerChip->DeclareProperty("longSide", fAlpidePixLong, "default 1024");
 	fMessengerChip->DeclareProperty("collimator", fCollimatorBuild, "default 0");
 
+    fNAlpidesAlongShort = 2; // Number of ALPIDE detectors along their short side
+    fNAlpidesAlongLong = 1; // Number of ALPIDE detectors along their long side
     fAlpidePixShort = 512; // Number of pixels along the ALPIDE's short side
     fAlpidePixLong = 1024; // Number of pixels along the ALPIDE's long side
     fCollimatorBuild = 0; // No collimator by default
@@ -123,6 +127,9 @@ void DetectorConstruction::DetectorSupportConstruction1x2()
     // 1) Base
     // x is along short -> 512 px
     // z is along long -> 1024 px
+    fSupportThickness = fSupportThickness / pixCompressionFactor;
+    fSupportCenter = - (fDepletionThickness / 2 + fNonSensitiveThickness + fSupportThickness / 2);
+
     fSupportShortSide = fShortSide * fNAlpidesAlongShort;
     fSupportLongSide = fLongSide * fNAlpidesAlongLong;
     G4Box* suppBox = new G4Box("suppBox", fSupportShortSide / 2, fSupportThickness / 2, fSupportLongSide / 2);

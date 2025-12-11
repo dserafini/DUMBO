@@ -50,8 +50,8 @@ private:
     // Depletion layer thickness (coinciding with the sensitive pixel's region volume)
     G4double fDepletionThickness = 25 * um;
     // Configuration parameters (2x2 or 4x2)
-    G4int fNAlpidesAlongShort = 2; // Number of ALPIDE detectors along their short side
-    G4int fNAlpidesAlongLong = 1; // Number of ALPIDE detectors along their long side
+    G4int fNAlpidesAlongShort; // Number of ALPIDE detectors along their short side
+    G4int fNAlpidesAlongLong; // Number of ALPIDE detectors along their long side
     // Calculated internally
     G4int fPixAlongShort = -1;
     G4int fPixAlongLong = -1;
@@ -96,7 +96,7 @@ private:
     G4double fSupportShortSide = 5 * cm; 
     G4double fSupportLongSide = 10 * cm;
     G4double fSupportThickness = 1 * mm; 
-    G4double fSupportCenter = - (fDepletionThickness / 2 + fNonSensitiveThickness + fSupportThickness / 2);
+    G4double fSupportCenter;
     G4double fSupportLateralCenter = - (fAlpideThickness / 2 - fOxideThickness - fDepletionThickness / 2);
     // PCB material
     G4Material* FR4;
