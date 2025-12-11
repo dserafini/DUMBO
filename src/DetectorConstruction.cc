@@ -321,6 +321,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     }
     else {
         G4cout << "Unsupported ALPIDE configuration!" << G4endl;
+        return nullptr;
     }
 
     // Matrix Logical/PhysicalVolume vectors                                          

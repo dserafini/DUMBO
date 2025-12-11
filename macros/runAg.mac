@@ -1,5 +1,7 @@
-/chip/shortSide 512
-/chip/longSide 1024
+/chip/shortSide 4
+/chip/longSide 4
+/chip/Nshort 2
+/chip/Nlong 1
 /chip/collimator 0
 
 /run/reinitializeGeometry
@@ -38,16 +40,8 @@
 # la direzione dall'alto (campione) verso il basso (chip) è 0 -1 0
 
 
-/run/printProgress 100000
+/run/printProgress 1000
 
-/gps/pos/centre -7.5 1 0 mm
+/gps/pos/centre 0 23.5 0 um
 /analysis/setFileName outputAg1.root
-#/run/beamOn 1000000
-
-/gps/pos/centre -2.5 1 0 mm
-/analysis/setFileName outputAg2.root
-#/run/beamOn 1000000
-
-/gps/pos/centre 2.5 1 0 mm
-/analysis/setFileName outputAg3.root
-/run/beamOn 1000000
+/run/beamOn 10000
