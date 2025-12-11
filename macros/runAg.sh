@@ -5,7 +5,7 @@ TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 LOGFILE="run_${TIMESTAMP}.log"
 
 # Parametri principali
-NEVENTS="100"  # Numero di eventi per posizione
+NEVENTS="100000"  # Numero di eventi per posizione
 NEVENTSPROG=$(( NEVENTS / 10 ))
 
 # Intestazione del file di log
@@ -13,8 +13,10 @@ echo "=== Log started on $(date) ===" > "$LOGFILE"
 echo "=== Log filename: ${LOGFILE} ===" >> "$LOGFILE"
 
 # Definisci le posizioni del GPS
-declare -a POSITIONS_X=(-7.5 -2.5 2.5)
-declare -a OUTPUTS=("outputAg1.root" "outputAg2.root" "outputAg3.root")
+# declare -a POSITIONS_X=(-7.5 -2.5 2.5)
+declare -a POSITIONS_X=(0)
+# declare -a OUTPUTS=("outputAg1.root" "outputAg2.root" "outputAg3.root")
+declare -a OUTPUTS=("outputAg1.root")
 
 for i in "${!POSITIONS_X[@]}"; do
     xpos=${POSITIONS_X[$i]}
@@ -57,7 +59,7 @@ EOF
     ###########################################################################
     # LANCIA SIMULAZIONE (output → log)
     ###########################################################################
-    ./sim "$TEMP_MACRO" >> "$LOGFILE" 2>&1
+    ./alpideSim "$TEMP_MACRO" >> "$LOGFILE" 2>&1
 
     echo ">>> [END]   position X=${xpos} mm"
 
