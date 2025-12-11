@@ -20,8 +20,8 @@ void RunAction::BeginOfRunAction(const G4Run*)
   // man->SetFirstHistoId(1);
   // Create H2
   fIdHitMap = man->CreateH2("hitMap", "Hits in Pixel Array",
-      fDetectorConstruction->GetzTotalNumberBins(), - fDetectorConstruction->GetzDetector(), fDetectorConstruction->GetzDetector(),
-      fDetectorConstruction->GetxTotalNumberBins(), - fDetectorConstruction->GetxDetector(), fDetectorConstruction->GetxDetector());
+      fDetectorConstruction->GetzTotalNumberBins(), - fDetectorConstruction->GetzDetector()/2., fDetectorConstruction->GetzDetector()/2.,
+      fDetectorConstruction->GetxTotalNumberBins(), - fDetectorConstruction->GetxDetector()/2., fDetectorConstruction->GetxDetector()/2.);
 
   // Histo containing the deposited energy in single pixel
   // Create H2 to retrieve the energy deposited in the pixels

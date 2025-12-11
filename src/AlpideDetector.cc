@@ -197,7 +197,7 @@ void AlpideDetector::EndOfEvent(G4HCofThisEvent*)
   {
     hitEventCount ++; // Increase the number of observed hits per analyzed event
     // Save data
-    hitsVector.push_back(std::make_pair(fzPosition, fxPosition));
+    hitsVector.push_back(std::make_pair(fxPosition, fzPosition));
     depositedEnergyPerHit.push_back(depositedEnergy);
     interactingParticles.push_back(particleName);
   }
